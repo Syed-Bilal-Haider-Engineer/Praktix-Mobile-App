@@ -8,7 +8,6 @@ import '../../../presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Splash Screen — first screen users see.
-
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
@@ -47,18 +46,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Logo placeholder with brand icon
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: const Icon(
-                Icons.school_rounded,
-                size: 56,
-                color: Colors.white,
+           SizedBox(
+              width: 140, // 👈 Explicitly sized to 140
+              height: 140,
+              child: Image.asset(
+                'assets/images/logo.webp',
+                fit: BoxFit.contain,
               ),
             )
                 .animate()

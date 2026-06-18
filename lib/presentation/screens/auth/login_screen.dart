@@ -65,14 +65,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40),
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    gradient: AppColors.primaryGradient,
-                    borderRadius: BorderRadius.circular(16),
+                // Removed the primary gradient Container box, displaying just the sized logo asset
+                SizedBox(
+                  width: 140, 
+                  height: 140,
+                  child: Image.asset(
+                    'assets/images/logo.webp',
+                    fit: BoxFit.contain,
                   ),
-                  child: const Icon(Icons.school_rounded, color: Colors.white, size: 32),
                 ).animate().scale(duration: 500.ms, curve: Curves.elasticOut),
                 const SizedBox(height: 24),
                 Text(
