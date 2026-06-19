@@ -28,11 +28,19 @@ class AppStrings {
 
   // Home
   static const featuredPrograms = 'Featured Programs';
-  static const featuredExperts = 'Featured Experts';
+  static const featuredExperts = 'Our Experts';
   static const upcomingWorkshops = 'Upcoming Workshops';
   static const recommendedOpportunities = 'Recommended Opportunities';
   static const aiRecommendations = 'AI Recommendations For You';
   static const yourProgress = 'Your Learning Progress';
+
+  // About
+  static const aboutTitle = 'About Praktix';
+  static const aboutParagraphs = [
+    'Praktix is a global platform connecting ambitious students and graduates with industry-leading companies across Europe and the GCC region.',
+    'Our mission is to bridge the gap between academic learning and professional practice, providing real-world experience that transforms careers.',
+    'Through partnerships with universities and corporations, we create meaningful opportunities for the next generation of professionals to excel in their chosen fields.',
+  ];
 
   // Program
   static const applyNow = 'Apply Now';

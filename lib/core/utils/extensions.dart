@@ -18,4 +18,20 @@ extension StringExtensions on String {
     if (isEmpty) return this;
     return '${this[0].toUpperCase()}${substring(1)}';
   }
+
+  String get firstName {
+    final trimmed = trim();
+    if (trimmed.isEmpty) return this;
+    return trimmed.split(RegExp(r'\s+')).first;
+  }
+
+  /// Derives a display name from an email local part (e.g. john.doe → John Doe).
+  static String nameFromEmail(String email) {
+    final local = email.split('@').first;
+    return local
+        .split(RegExp(r'[._-]+'))
+        .where((part) => part.isNotEmpty)
+        .map((part) => part.capitalize)
+        .join(' ');
+  }
 }
