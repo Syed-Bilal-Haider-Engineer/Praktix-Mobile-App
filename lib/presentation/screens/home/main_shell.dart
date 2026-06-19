@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
-import '../ai_assistant/ai_assistant_screen.dart';
 import '../profile/profile_screen.dart';
+import '../ai_assistant//ai_assistant_screen.dart';
+import '../about/about_screen.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -16,7 +17,9 @@ class _MainShellState extends State<MainShell> {
   final _screens = const [
     HomeScreen(),
     AiAssistantScreen(),
+    AboutScreen(),
     ProfileScreen(),
+
   ];
 
   @override
@@ -39,6 +42,11 @@ class _MainShellState extends State<MainShell> {
             icon: Icon(Icons.auto_awesome_outlined),
             selectedIcon: Icon(Icons.auto_awesome),
             label: 'AI Advisor',
+          ),
+           NavigationDestination(
+            icon: Icon(Icons.abc),
+            selectedIcon: Icon(Icons.auto_awesome),
+            label: 'About',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),
