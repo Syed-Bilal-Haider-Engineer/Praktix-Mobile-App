@@ -7,10 +7,12 @@ class SectionHeader extends StatelessWidget {
     super.key,
     required this.title,
     this.onSeeAll,
+    this.inverted = false,
   });
 
   final String title;
   final VoidCallback? onSeeAll;
+  final bool inverted;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +25,16 @@ class SectionHeader extends StatelessWidget {
             title,
             style: context.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
+              color: inverted ? Colors.white : null,
             ),
           ),
           if (onSeeAll != null)
             TextButton(
               onPressed: onSeeAll,
-              child: const Text('See all'),
+              child: Text(
+                'See all',
+                style: TextStyle(color: inverted ? Colors.white70 : null),
+              ),
             ),
         ],
       ),

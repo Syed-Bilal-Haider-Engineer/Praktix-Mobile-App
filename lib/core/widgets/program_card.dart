@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../data/models/program.dart';
+import '../constants/app_spacing.dart';
 import '../theme/app_colors.dart';
 import '../utils/extensions.dart';
+import 'app_image.dart';
 
 /// Card widget for displaying a program in horizontal lists.
 class ProgramCard extends StatelessWidget {
@@ -22,9 +23,9 @@ class ProgramCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 280,
-        margin: const EdgeInsets.only(right: 16),
+        margin: const EdgeInsets.only(right: AppSpacing.md),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           color: context.isDarkMode ? AppColors.cardDark : AppColors.cardLight,
           border: Border.all(
             color: context.isDarkMode ? AppColors.borderDark : AppColors.borderLight,
@@ -41,26 +42,21 @@ class ProgramCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-              child: CachedNetworkImage(
-                imageUrl: program.imageUrl,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(AppSpacing.cardRadius),
+              ),
+              child: AppImage(
+                imagePath: program.imageUrl,
                 height: 140,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                placeholder: (_, _) => Container(
-                  height: 140,
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                ),
-                errorWidget: (_, _, _) => Container(
-                  height: 140,
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  child: const Icon(Icons.school, size: 40, color: AppColors.primary),
-                ),
+                placeholderIcon: Icons.school,
+                placeholderColor: AppColors.primary,
+                semanticLabel: '${program.title} course image',
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacing.md),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
