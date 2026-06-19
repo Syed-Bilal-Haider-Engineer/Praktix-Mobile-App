@@ -57,7 +57,9 @@ class _ExpertProfileScreenState extends ConsumerState<ExpertProfileScreen> {
                         backgroundColor: Colors.white,
                         child: CircleAvatar(
                           radius: 52,
-                          backgroundImage: CachedNetworkImageProvider(expert.imageUrl),
+                          backgroundImage: expert.imageUrl.startsWith('assets/')
+    ? AssetImage(expert.imageUrl)
+    : CachedNetworkImageProvider(expert.imageUrl) as ImageProvider,
                         ),
                       ).animate().scale(duration: 500.ms, curve: Curves.elasticOut),
                       const SizedBox(height: 12),

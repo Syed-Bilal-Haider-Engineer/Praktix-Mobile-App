@@ -1,3 +1,5 @@
+// lib/core/widgets/expert_card.dart
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -36,15 +38,25 @@ class ExpertCard extends StatelessWidget {
               radius: 36,
               backgroundColor: AppColors.primary.withValues(alpha: 0.1),
               child: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: expert.imageUrl,
-                  width: 72,
-                  height: 72,
-                  fit: BoxFit.cover,
-                  placeholder: (_, _) => const Icon(Icons.person, color: AppColors.primary),
-                  errorWidget: (_, _, _) =>
-                      const Icon(Icons.person, color: AppColors.primary),
-                ),
+                child: expert.imageUrl.startsWith('assets/')
+                    ? Image.asset(
+                        expert.imageUrl,
+                        width: 72,
+                        height: 72,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, _, _) =>
+                            const Icon(Icons.person, color: AppColors.primary),
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: expert.imageUrl,
+                        width: 72,
+                        height: 72,
+                        fit: BoxFit.cover,
+                        placeholder: (_, _) =>
+                            const Icon(Icons.person, color: AppColors.primary),
+                        errorWidget: (_, _, _) =>
+                            const Icon(Icons.person, color: AppColors.primary),
+                      ),
               ),
             ),
             const SizedBox(height: 12),
