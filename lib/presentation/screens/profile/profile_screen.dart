@@ -22,14 +22,16 @@ class ProfileScreen extends ConsumerWidget {
     final homeAsync = ref.watch(homeDataProvider);
     final isDark = ref.watch(themeModeProvider) == ThemeMode.dark;
 
-    final enrolledPrograms = homeAsync.whenOrNull(
+    final enrolledPrograms =
+        homeAsync.whenOrNull(
           data: (home) => home.programs
               .where((p) => user.enrolledProgramIds.contains(p.id))
               .toList(),
         ) ??
         [];
 
-    final savedOpportunities = homeAsync.whenOrNull(
+    final savedOpportunities =
+        homeAsync.whenOrNull(
           data: (home) => home.opportunities
               .where((o) => user.savedOpportunityIds.contains(o.id))
               .toList(),
@@ -54,7 +56,11 @@ class ProfileScreen extends ConsumerWidget {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : const Icon(Icons.person, size: 48, color: AppColors.primary),
+                    : const Icon(
+                        Icons.person,
+                        size: 48,
+                        color: AppColors.primary,
+                      ),
               ).animate().scale(duration: 500.ms, curve: Curves.elasticOut),
               const SizedBox(height: 16),
               Text(
@@ -251,7 +257,9 @@ class ProfileScreen extends ConsumerWidget {
         color: context.isDarkMode ? AppColors.cardDark : AppColors.cardLight,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: context.isDarkMode ? AppColors.borderDark : AppColors.borderLight,
+          color: context.isDarkMode
+              ? AppColors.borderDark
+              : AppColors.borderLight,
         ),
       ),
       child: ListTile(
