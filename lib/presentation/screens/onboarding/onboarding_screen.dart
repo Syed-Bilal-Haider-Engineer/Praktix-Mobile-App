@@ -25,34 +25,38 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   int _currentPage = 0;
 
   List<_OnboardingPageData> get _pages => [
-        _OnboardingPageData(
-          visual: const BrandedLogo(sizeFactor: 0.24),
-          title: AppStrings.onboardingTitle1,
-          description: AppStrings.onboardingDesc1,
-          accentColor: AppColors.primary,
-          showIconBackground: false,
-        ),
-        _OnboardingPageData(
-          visual: _OnboardingIllustration(
-            icon: Icons.verified_rounded,
-            color: AppColors.secondary,
-            secondaryIcon: Icons.workspace_premium_rounded,
-          ),
-          title: AppStrings.onboardingTitle2,
-          description: AppStrings.onboardingDesc2,
-          accentColor: AppColors.secondary,
-        ),
-        _OnboardingPageData(
-          visual: _OnboardingIllustration(
-            icon: Icons.rocket_launch_rounded,
-            color: AppColors.accent,
-            secondaryIcon: Icons.trending_up_rounded,
-          ),
-          title: AppStrings.onboardingTitle3,
-          description: AppStrings.onboardingDesc3,
-          accentColor: AppColors.accent,
-        ),
-      ];
+    _OnboardingPageData(
+      visual: const SizedBox(
+        width: 160,
+        height: 160,
+        child: BrandedLogo(sizeFactor: 0.24),
+      ),
+      title: AppStrings.onboardingTitle1,
+      description: AppStrings.onboardingDesc1,
+      accentColor: AppColors.primary,
+      showIconBackground: false,
+    ),
+    _OnboardingPageData(
+      visual: _OnboardingIllustration(
+        icon: Icons.verified_rounded,
+        color: AppColors.secondary,
+        secondaryIcon: Icons.workspace_premium_rounded,
+      ),
+      title: AppStrings.onboardingTitle2,
+      description: AppStrings.onboardingDesc2,
+      accentColor: AppColors.secondary,
+    ),
+    _OnboardingPageData(
+      visual: _OnboardingIllustration(
+        icon: Icons.rocket_launch_rounded,
+        color: AppColors.accent,
+        secondaryIcon: Icons.trending_up_rounded,
+      ),
+      title: AppStrings.onboardingTitle3,
+      description: AppStrings.onboardingDesc3,
+      accentColor: AppColors.accent,
+    ),
+  ];
 
   Future<void> _completeOnboarding() async {
     await ref.read(localStorageProvider).setOnboardingComplete(true);
@@ -86,7 +90,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(padding, AppSpacing.sm, padding, 0),
+                padding: EdgeInsets.fromLTRB(
+                  padding,
+                  AppSpacing.sm,
+                  padding,
+                  0,
+                ),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: TextButton(
@@ -99,8 +108,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: _pages.length,
-                  onPageChanged: (index) => setState(() => _currentPage = index),
-                  itemBuilder: (_, index) => _OnboardingPage(page: _pages[index]),
+                  onPageChanged: (index) =>
+                      setState(() => _currentPage = index),
+                  itemBuilder: (_, index) =>
+                      _OnboardingPage(page: _pages[index]),
                 ),
               ),
               SmoothPageIndicator(
@@ -119,7 +130,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: padding),
                 child: PrimaryButton(
-                  label: _currentPage == _pages.length - 1 ? 'Get Started' : 'Continue',
+                  label: _currentPage == _pages.length - 1
+                      ? 'Get Started'
+                      : 'Continue',
                   onPressed: _nextPage,
                 ),
               ),
@@ -226,7 +239,10 @@ class _OnboardingPage extends StatelessWidget {
     final padding = AppSpacing.pagePadding(context);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padding, vertical: AppSpacing.lg),
+      padding: EdgeInsets.symmetric(
+        horizontal: padding,
+        vertical: AppSpacing.lg,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

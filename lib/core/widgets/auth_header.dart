@@ -22,15 +22,16 @@ class AuthHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alignment =
-        centered ? CrossAxisAlignment.center : CrossAxisAlignment.start;
+    final alignment = centered
+        ? CrossAxisAlignment.center
+        : CrossAxisAlignment.start;
     final textAlign = centered ? TextAlign.center : TextAlign.start;
 
     return Column(
       crossAxisAlignment: alignment,
       children: [
         if (showLogo) ...[
-          BrandedLogo(sizeFactor: 0.26),
+          BrandedLogo(sizeFactor: 0.4),
           const SizedBox(height: AppSpacing.lg),
         ],
         Text(
