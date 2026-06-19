@@ -1,9 +1,10 @@
+// lib/presentation/screens/profile/profile_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
 import '../../../core/constants/app_strings.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -41,27 +42,22 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               const SizedBox(height: 24),
+
+              // 👈 Updated Top Header Circle with a clean Person Icon layout
               CircleAvatar(
                 radius: 48,
-                backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                child: user.avatarUrl != null
-                    ? ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl: user.avatarUrl!,
-                          width: 96,
-                          height: 96,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : const Icon(
-                        Icons.person,
-                        size: 48,
-                        color: AppColors.primary,
-                      ),
+                backgroundColor: AppColors.primary.withOpacity(0.1),
+                child: const Icon(
+                  Icons.person,
+                  size: 44, // Perfectly proportioned inner icon size
+                  color: AppColors.primary,
+                ),
               ).animate().scale(duration: 500.ms, curve: Curves.elasticOut),
+
               const SizedBox(height: 16),
               Text(
                 user.name,
@@ -72,12 +68,13 @@ class ProfileScreen extends ConsumerWidget {
               Text(
                 user.email,
                 style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.isDarkMode
+                  color: isDark
                       ? AppColors.textSecondaryDark
                       : AppColors.textSecondaryLight,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -95,34 +92,29 @@ class ProfileScreen extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 24),
+
               _buildSettingsTile(
                 context,
                 icon: Icons.dark_mode_outlined,
                 title: AppStrings.darkMode,
                 trailing: Switch(
                   value: isDark,
+                  activeColor: AppColors.primary,
                   onChanged: (_) =>
                       ref.read(themeModeProvider.notifier).toggleDarkMode(),
                 ),
               ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    AppStrings.enrolledPrograms,
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
+              const SizedBox(height: 24),
+
+              _buildSectionHeader(context, AppStrings.enrolledPrograms),
               const SizedBox(height: 8),
               if (enrolledPrograms.isEmpty)
                 const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text('No enrolled programs yet'),
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'No enrolled programs yet',
+                    style: TextStyle(color: Colors.grey),
+                  ),
                 )
               else
                 ...enrolledPrograms.map(
@@ -132,35 +124,43 @@ class ProfileScreen extends ConsumerWidget {
                       height: 44,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: AppColors.primary.withValues(alpha: 0.1),
+                        color: AppColors.primary.withOpacity(0.1),
                       ),
                       child: const Icon(Icons.school, color: AppColors.primary),
                     ),
-                    title: Text(program.title),
-                    subtitle: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: LinearProgressIndicator(
-                        value: program.progress,
-                        minHeight: 4,
+                    title: Text(
+                      program.title,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: program.progress,
+                          minHeight: 5,
+                          backgroundColor: isDark
+                              ? Colors.black26
+                              : Colors.grey.shade200,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                            AppColors.primary,
+                          ),
+                        ),
                       ),
                     ),
-                    trailing: Text('${(program.progress * 100).toInt()}%'),
+                    trailing: Text(
+                      '${(program.progress * 100).toInt()}%',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
                     onTap: () => context.push('/program/${program.id}'),
                   ),
                 ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    AppStrings.certificates,
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
+
+              const SizedBox(height: 20),
+              _buildSectionHeader(context, AppStrings.certificates),
               const SizedBox(height: 8),
               ...MockData.certificates.map(
                 (cert) => ListTile(
@@ -169,34 +169,30 @@ class ProfileScreen extends ConsumerWidget {
                     height: 44,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: AppColors.success.withValues(alpha: 0.1),
+                      color: AppColors.success.withOpacity(0.1),
                     ),
                     child: const Icon(Icons.verified, color: AppColors.success),
                   ),
-                  title: Text(cert.title),
+                  title: Text(
+                    cert.title,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   subtitle: Text(
                     '${cert.programName} · ${DateFormat('MMM yyyy').format(cert.issuedDate)}',
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    AppStrings.savedOpportunities,
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
+
+              const SizedBox(height: 20),
+              _buildSectionHeader(context, AppStrings.savedOpportunities),
               const SizedBox(height: 8),
               if (savedOpportunities.isEmpty)
                 const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text('No saved opportunities'),
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'No saved opportunities',
+                    style: TextStyle(color: Colors.grey),
+                  ),
                 )
               else
                 ...savedOpportunities.map(
@@ -206,15 +202,20 @@ class ProfileScreen extends ConsumerWidget {
                       height: 44,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: AppColors.secondary.withValues(alpha: 0.1),
+                        color: AppColors.secondary.withOpacity(0.1),
                       ),
                       child: const Icon(Icons.work, color: AppColors.secondary),
                     ),
-                    title: Text(opp.title),
+                    title: Text(
+                      opp.title,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
                     subtitle: Text('${opp.company} · ${opp.location}'),
                   ),
                 ),
-              const SizedBox(height: 24),
+
+              const SizedBox(height: 32),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: OutlinedButton.icon(
@@ -225,11 +226,14 @@ class ProfileScreen extends ConsumerWidget {
                   icon: const Icon(Icons.logout, color: AppColors.error),
                   label: const Text(
                     AppStrings.logout,
-                    style: TextStyle(color: AppColors.error),
+                    style: TextStyle(
+                      color: AppColors.error,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                    side: const BorderSide(color: AppColors.error),
+                    minimumSize: const Size(double.infinity, 50),
+                    side: const BorderSide(color: AppColors.error, width: 1.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -244,28 +248,42 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          title,
+          style: context.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildSettingsTile(
     BuildContext context, {
     required IconData icon,
     required String title,
     required Widget trailing,
   }) {
+    final isDark = context.isDarkMode;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
-        color: context.isDarkMode ? AppColors.cardDark : AppColors.cardLight,
+        color: isDark ? AppColors.cardDark : AppColors.cardLight,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: context.isDarkMode
-              ? AppColors.borderDark
-              : AppColors.borderLight,
+          color: isDark ? AppColors.borderDark : AppColors.borderLight,
         ),
       ),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         leading: Icon(icon, color: AppColors.primary),
-        title: Text(title),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
         trailing: trailing,
       ),
     );
@@ -288,7 +306,7 @@ class _StatBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
