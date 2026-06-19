@@ -1,4 +1,4 @@
-name: fultter_app
+name: praktix 
 description: Praktix Mobile App MVP - Career learning platform connecting education, AI, and global expertise.
 publish_to: 'none'
 version: 1.0.0+1
@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^2.6.1
   go_router: ^14.8.1
@@ -29,3 +30,10 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path_android: "assets/images/logo.webp"
+  adaptive_icon_background: "#2563EB" 
+  adaptive_icon_foreground: "assets/images/logo.webp"
