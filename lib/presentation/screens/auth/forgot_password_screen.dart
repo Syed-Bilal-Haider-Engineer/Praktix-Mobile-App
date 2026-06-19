@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../core/widgets/app_text_field.dart';
+import '../../../core/widgets/auth_header.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../presentation/providers/auth_provider.dart';
 
@@ -44,12 +46,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leading: BackButton(onPressed: () => context.pop())),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: _emailSent ? _buildSuccessView() : _buildFormView(),
-        ),
+      appBar: AppBar(
+        leading: BackButton(onPressed: () => context.pop()),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: AuthFormLayout(
+        child: _emailSent ? _buildSuccessView() : _buildFormView(),
       ),
     );
   }
@@ -60,21 +63,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
-          Text(
-            AppStrings.resetPassword,
-            style: context.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
+          const AuthHeader(
+            title: AppStrings.resetPassword,
+            subtitle: AppStrings.resetPasswordDesc,
+            showLogo: false,
           ),
-          const SizedBox(height: 8),
-          Text(
-            AppStrings.resetPasswordDesc,
-            style: context.textTheme.bodyLarge?.copyWith(
-              color: AppColors.textSecondaryLight,
-            ),
-          ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xl),
           AppTextField(
             controller: _emailController,
             label: AppStrings.email,
@@ -87,7 +81,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               return null;
             },
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xl),
           PrimaryButton(
             label: 'Send Reset Link',
             onPressed: _resetPassword,
@@ -104,30 +98,33 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 80,
-            height: 80,
+            width: 88,
+            height: 88,
             decoration: BoxDecoration(
-              color: AppColors.success.withValues(alpha: 0.1),
+              color: AppColors.success.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.mark_email_read, size: 40, color: AppColors.success),
+            child: const Icon(Icons.mark_email_read, size: 44, color: AppColors.success),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.lg),
           Text(
             'Check your email',
             style: context.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             'We sent a password reset link to\n${_emailController.text}',
             textAlign: TextAlign.center,
             style: context.textTheme.bodyLarge?.copyWith(
-              color: AppColors.textSecondaryLight,
+              color: context.isDarkMode
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
+              height: 1.5,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xl),
           PrimaryButton(
             label: 'Back to Login',
             onPressed: () => context.pop(),
