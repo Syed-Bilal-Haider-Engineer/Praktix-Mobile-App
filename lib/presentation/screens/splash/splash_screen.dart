@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/constants/app_spacing.dart';
 import '../../../core/router/app_router.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/branded_logo.dart';
+import '../../../core/widgets/decorated_background.dart';
 import '../../../presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,59 +40,91 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-           SizedBox(
-              width: 140, // 👈 Explicitly sized to 140
-              height: 140,
-              child: Image.asset(
-                'assets/images/logo.webp',
-                fit: BoxFit.contain,
-              ),
-            )
-                .animate()
-                .scale(
-                  begin: const Offset(0.5, 0.5),
-                  end: const Offset(1, 1),
-                  duration: 800.ms,
-                  curve: Curves.elasticOut,
-                )
-                .fadeIn(),
-            const SizedBox(height: 24),
-            Text(
-              AppConstants.appName,
-              style: const TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                letterSpacing: 1.2,
-              ),
-            ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.3, end: 0),
-            const SizedBox(height: 8),
-            Text(
-              AppConstants.appTagline,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white.withValues(alpha: 0.8),
-                letterSpacing: 0.5,
-              ),
-            ).animate().fadeIn(delay: 600.ms),
-            const SizedBox(height: 48),
-            SizedBox(
-              width: 32,
-              height: 32,
-              child: CircularProgressIndicator(
-                strokeWidth: 3,
-                color: Colors.white.withValues(alpha: 0.8),
-              ),
-            ).animate().fadeIn(delay: 800.ms),
-          ],
+      body: DecoratedBackground(
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: size.width >= 600 ? 420 : size.width,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSpacing.pagePadding(context),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Spacer(flex: 2),
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withValues(alpha: 0.12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 32,
+                                offset: const Offset(0, 12),
+                              ),
+                            ],
+                          ),
+                          child: BrandedLogo(sizeFactor: 0.28),
+                        )
+                            .animate()
+                            .scale(
+                              begin: const Offset(0.6, 0.6),
+                              end: const Offset(1, 1),
+                              duration: 900.ms,
+                              curve: Curves.elasticOut,
+                            )
+                            .fadeIn(),
+                        const SizedBox(height: AppSpacing.xl),
+                        Text(
+                          AppConstants.appName,
+                          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                letterSpacing: 1.5,
+                                height: 1.1,
+                              ),
+                          textAlign: TextAlign.center,
+                        )
+                            .animate()
+                            .fadeIn(delay: 350.ms)
+                            .slideY(begin: 0.25, end: 0, curve: Curves.easeOut),
+                        const SizedBox(height: AppSpacing.sm),
+                        Text(
+                          AppConstants.appTagline,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.85),
+                                letterSpacing: 0.8,
+                                fontWeight: FontWeight.w500,
+                                height: 1.4,
+                              ),
+                          textAlign: TextAlign.center,
+                        ).animate().fadeIn(delay: 550.ms),
+                        const Spacer(flex: 2),
+                        SizedBox(
+                          width: 36,
+                          height: 36,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                            color: Colors.white.withValues(alpha: 0.85),
+                          ),
+                        ).animate().fadeIn(delay: 750.ms),
+                        const SizedBox(height: AppSpacing.xxl),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
