@@ -4,6 +4,7 @@ import '../../models/workshop.dart';
 import '../../models/opportunity.dart';
 import '../../models/certificate.dart';
 import '../../models/user.dart';
+import '../../../core/constants/app_assets.dart';
 
 class MockData {
   MockData._();
@@ -24,8 +25,7 @@ class MockData {
         'Measure ROI of AI investments',
       ],
       category: 'AI & Leadership',
-      imageUrl:
-          'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80',
+      imageUrl: AppAssets.placeholderProgram,
       enrolled: true,
       progress: 0.65,
     ),
@@ -44,8 +44,7 @@ class MockData {
         'Create portfolio-ready AI projects',
       ],
       category: 'AI & Engineering',
-      imageUrl:
-          'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80',
+      imageUrl: AppAssets.placeholderProgram,
     ),
     Program(
       id: 'prog-3',
@@ -62,8 +61,7 @@ class MockData {
         'Collaborate with healthcare professionals',
       ],
       category: 'AI & Healthcare',
-      imageUrl:
-          'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+      imageUrl: AppAssets.placeholderProgram,
     ),
     Program(
       id: 'prog-4',
@@ -80,8 +78,7 @@ class MockData {
         'Earn industry-recognized credentials',
       ],
       category: 'Cybersecurity',
-      imageUrl:
-          'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80',
+      imageUrl: AppAssets.placeholderProgram,
       enrolled: true,
       progress: 0.30,
     ),
@@ -90,51 +87,51 @@ class MockData {
   static const experts = <Expert>[
     Expert(
       id: 'exp-1',
-      name: 'Dr. Sarah Chen',
-      title: 'AI Research Lead',
-      specialization: 'Machine Learning & NLP',
+      name: 'Rosemarie Bot-Schulz',
+      title: 'Freiberufler Freelancer Consultant',
+      company: 'Rosemarie Bot-Schulz',
+      specialization: 'Freelance Consulting',
       bio:
-          'Dr. Chen has 15+ years of experience in AI research and industry applications. She has led AI teams at Fortune 500 companies and published 40+ papers on natural language processing.',
-      experience: '15+ years in AI research and industry',
-      imageUrl:
-          'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
-      programIds: ['prog-1', 'prog-2'],
+          'Rosemarie brings extensive consulting experience across European markets, helping organizations navigate complex business transformations.',
+      experience: '15+ years in freelance consulting',
+      imageUrl: AppAssets.expertRosemarie,
+      programIds: ['prog-1'],
     ),
     Expert(
       id: 'exp-2',
-      name: 'Marcus Weber',
-      title: 'Cybersecurity Director',
-      specialization: 'Penetration Testing & Security Architecture',
+      name: 'Paul Hellwig',
+      title: 'CTO / CDAO',
+      company: 'DEEEP.AI',
+      specialization: 'AI Strategy & Technology Leadership',
       bio:
-          'Marcus is a certified ethical hacker with extensive experience securing enterprise systems across Europe. He mentors interns through real-world security challenges.',
-      experience: '12+ years in cybersecurity',
-      imageUrl:
-          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
-      programIds: ['prog-4'],
+          'Paul leads technology and data strategy at DEEEP.AI, driving AI innovation and digital transformation for enterprise clients.',
+      experience: '12+ years in technology leadership',
+      imageUrl: AppAssets.expertPaul,
+      programIds: ['prog-2'],
     ),
     Expert(
       id: 'exp-3',
-      name: 'Dr. Amira Hassan',
-      title: 'Healthcare AI Specialist',
-      specialization: 'Medical AI & Health Informatics',
+      name: 'Marc Gladysz',
+      title: 'Interim CFO/Controller/Finance Manager',
+      company: 'Anna Maria Rasenberg SLU',
+      specialization: 'Finance & Controlling',
       bio:
-          'Dr. Hassan bridges the gap between clinical practice and AI innovation. She has implemented AI diagnostic tools in hospitals across the GCC region.',
-      experience: '10+ years in healthcare technology',
-      imageUrl:
-          'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&q=80',
-      programIds: ['prog-3'],
+          'Marc provides interim financial leadership and controller services, specializing in corporate finance and operational excellence.',
+      experience: '10+ years in finance management',
+      imageUrl: AppAssets.expertMarc,
+      programIds: ['prog-1', 'prog-4'],
     ),
     Expert(
       id: 'exp-4',
-      name: 'James Okafor',
-      title: 'Tech Career Coach',
-      specialization: 'Career Development & Leadership',
+      name: 'Vassilios Albanis',
+      title: 'Head of Knowledge Assets Commercialisation',
+      company: 'Distributed Cognition',
+      specialization: 'Knowledge Commercialisation',
       bio:
-          'James has helped 500+ professionals transition into tech careers. He specializes in portfolio building, interview preparation, and career strategy.',
-      experience: '8+ years in career coaching',
-      imageUrl:
-          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
-      programIds: ['prog-1', 'prog-2', 'prog-3', 'prog-4'],
+          'Vassilios leads knowledge asset commercialisation, bridging research, innovation, and market opportunities across Europe.',
+      experience: '8+ years in knowledge management',
+      imageUrl: AppAssets.expertVassilios,
+      programIds: ['prog-2', 'prog-3'],
     ),
   ];
 
@@ -146,9 +143,8 @@ class MockData {
           'Learn the fundamentals of crafting effective prompts for LLMs.',
       date: DateTime.now().add(const Duration(days: 3)),
       time: '14:00 - 16:00 CET',
-      speaker: 'Dr. Sarah Chen',
-      imageUrl:
-          'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&q=80',
+      speaker: 'Paul Hellwig',
+      imageUrl: AppAssets.placeholderWorkshop,
       isOnline: true,
     ),
     Workshop(
@@ -158,9 +154,8 @@ class MockData {
           'A hands-on workshop on creating portfolio projects that impress hiring managers.',
       date: DateTime.now().add(const Duration(days: 7)),
       time: '10:00 - 12:00 CET',
-      speaker: 'James Okafor',
-      imageUrl:
-          'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=80',
+      speaker: 'Marc Gladysz',
+      imageUrl: AppAssets.placeholderWorkshop,
       isOnline: true,
     ),
     Workshop(
@@ -170,9 +165,8 @@ class MockData {
           'Stay ahead of emerging threats with insights from industry experts.',
       date: DateTime.now().add(const Duration(days: 14)),
       time: '16:00 - 18:00 CET',
-      speaker: 'Marcus Weber',
-      imageUrl:
-          'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&q=80',
+      speaker: 'Vassilios Albanis',
+      imageUrl: AppAssets.placeholderWorkshop,
       isOnline: false,
     ),
   ];
@@ -186,8 +180,7 @@ class MockData {
       type: 'Full-time',
       description:
           'Join our AI team to build next-generation NLP solutions for enterprise clients.',
-      imageUrl:
-          'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=80',
+      imageUrl: AppAssets.placeholderOpportunity,
       isSaved: true,
     ),
     Opportunity(
@@ -198,8 +191,7 @@ class MockData {
       type: 'Internship',
       description:
           '6-month internship focusing on threat detection and incident response.',
-      imageUrl:
-          'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=80',
+      imageUrl: AppAssets.placeholderOpportunity,
     ),
     Opportunity(
       id: 'opp-3',
@@ -209,8 +201,7 @@ class MockData {
       type: 'Full-time',
       description:
           'Apply ML models to improve patient outcomes in regional hospitals.',
-      imageUrl:
-          'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&q=80',
+      imageUrl: AppAssets.placeholderOpportunity,
       isSaved: true,
     ),
     Opportunity(
@@ -221,8 +212,7 @@ class MockData {
       type: 'Full-time',
       description:
           'Lead product strategy for AI-powered SaaS tools in the B2B space.',
-      imageUrl:
-          'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&q=80',
+      imageUrl: AppAssets.placeholderOpportunity,
     ),
   ];
 

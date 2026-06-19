@@ -8,6 +8,7 @@ class Expert {
     required this.experience,
     required this.imageUrl,
     required this.programIds,
+    this.company = '',
     this.isFollowing = false,
   });
 
@@ -19,6 +20,7 @@ class Expert {
   final String experience;
   final String imageUrl;
   final List<String> programIds;
+  final String company;
   final bool isFollowing;
 
   Expert copyWith({
@@ -30,6 +32,7 @@ class Expert {
     String? experience,
     String? imageUrl,
     List<String>? programIds,
+    String? company,
     bool? isFollowing,
   }) {
     return Expert(
@@ -41,6 +44,7 @@ class Expert {
       experience: experience ?? this.experience,
       imageUrl: imageUrl ?? this.imageUrl,
       programIds: programIds ?? this.programIds,
+      company: company ?? this.company,
       isFollowing: isFollowing ?? this.isFollowing,
     );
   }
@@ -55,6 +59,7 @@ class Expert {
       experience: json['experience'] as String,
       imageUrl: json['imageUrl'] as String,
       programIds: List<String>.from(json['programIds'] as List),
+      company: json['company'] as String? ?? '',
       isFollowing: json['isFollowing'] as bool? ?? false,
     );
   }
@@ -68,6 +73,7 @@ class Expert {
         'experience': experience,
         'imageUrl': imageUrl,
         'programIds': programIds,
+        'company': company,
         'isFollowing': isFollowing,
       };
 }
