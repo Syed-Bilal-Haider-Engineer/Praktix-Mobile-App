@@ -3,9 +3,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/extensions.dart';
+import '../../../core/widgets/branded_logo.dart';
+import '../../../core/widgets/decorated_background.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../presentation/providers/providers.dart';
 
@@ -20,34 +24,33 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
 
-  List<_OnboardingPage> get _pages => [
-        _OnboardingPage(
-          imageOrIcon: SizedBox(
-            width: 140,
-            height: 140,
-            child: Image.asset(
-              'assets/images/logo.webp',
-              fit: BoxFit.contain,
-            ),
-          ),
+  List<_OnboardingPageData> get _pages => [
+        _OnboardingPageData(
+          visual: const BrandedLogo(sizeFactor: 0.24),
           title: AppStrings.onboardingTitle1,
           description: AppStrings.onboardingDesc1,
-          color: AppColors.primary,
-          showBackground: false, // 👈 Works perfectly now!
+          accentColor: AppColors.primary,
+          showIconBackground: false,
         ),
-        const _OnboardingPage(
-          imageOrIcon: Icon(Icons.verified_rounded, size: 64, color: AppColors.secondary),
+        _OnboardingPageData(
+          visual: _OnboardingIllustration(
+            icon: Icons.verified_rounded,
+            color: AppColors.secondary,
+            secondaryIcon: Icons.workspace_premium_rounded,
+          ),
           title: AppStrings.onboardingTitle2,
           description: AppStrings.onboardingDesc2,
-          color: AppColors.secondary,
-          showBackground: true, 
+          accentColor: AppColors.secondary,
         ),
-        const _OnboardingPage(
-          imageOrIcon: Icon(Icons.rocket_launch_rounded, size: 64, color: AppColors.accent),
+        _OnboardingPageData(
+          visual: _OnboardingIllustration(
+            icon: Icons.rocket_launch_rounded,
+            color: AppColors.accent,
+            secondaryIcon: Icons.trending_up_rounded,
+          ),
           title: AppStrings.onboardingTitle3,
           description: AppStrings.onboardingDesc3,
-          color: AppColors.accent,
-          showBackground: true, 
+          accentColor: AppColors.accent,
         ),
       ];
 
@@ -75,101 +78,189 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pagesList = _pages; 
+    final padding = AppSpacing.pagePadding(context);
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: TextButton(
-                onPressed: _completeOnboarding,
-                child: const Text('Skip'),
+      body: SoftDecoratedBackground(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(padding, AppSpacing.sm, padding, 0),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: TextButton(
+                    onPressed: _completeOnboarding,
+                    child: const Text('Skip'),
+                  ),
+                ),
               ),
-            ),
-            Expanded(
-              child: PageView.builder(
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: _pages.length,
+                  onPageChanged: (index) => setState(() => _currentPage = index),
+                  itemBuilder: (_, index) => _OnboardingPage(page: _pages[index]),
+                ),
+              ),
+              SmoothPageIndicator(
                 controller: _pageController,
-                itemCount: pagesList.length,
-                onPageChanged: (index) => setState(() => _currentPage = index),
-                itemBuilder: (_, index) => pagesList[index],
+                count: _pages.length,
+                effect: ExpandingDotsEffect(
+                  dotHeight: 8,
+                  dotWidth: 8,
+                  activeDotColor: _pages[_currentPage].accentColor,
+                  dotColor: context.isDarkMode
+                      ? AppColors.borderDark
+                      : AppColors.borderLight,
+                ),
               ),
-            ),
-            SmoothPageIndicator(
-              controller: _pageController,
-              count: pagesList.length,
-              effect: const ExpandingDotsEffect(
-                dotHeight: 8,
-                dotWidth: 8,
-                activeDotColor: AppColors.primary,
-                dotColor: AppColors.borderLight,
+              const SizedBox(height: AppSpacing.xl),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: padding),
+                child: PrimaryButton(
+                  label: _currentPage == _pages.length - 1 ? 'Get Started' : 'Continue',
+                  onPressed: _nextPage,
+                ),
               ),
-            ),
-            const SizedBox(height: 32),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: PrimaryButton(
-                label: _currentPage == pagesList.length - 1 ? 'Get Started' : 'Continue',
-                onPressed: _nextPage,
-              ),
-            ),
-            const SizedBox(height: 32),
-          ],
+              const SizedBox(height: AppSpacing.xl),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _OnboardingPage extends StatelessWidget {
-  const _OnboardingPage({
-    required this.imageOrIcon,
+class _OnboardingPageData {
+  const _OnboardingPageData({
+    required this.visual,
     required this.title,
     required this.description,
-    required this.color,
-    this.showBackground = true, 
+    required this.accentColor,
+    this.showIconBackground = true,
   });
 
-  final Widget imageOrIcon; 
+  final Widget visual;
   final String title;
   final String description;
+  final Color accentColor;
+  final bool showIconBackground;
+}
+
+class _OnboardingIllustration extends StatelessWidget {
+  const _OnboardingIllustration({
+    required this.icon,
+    required this.color,
+    required this.secondaryIcon,
+  });
+
+  final IconData icon;
   final Color color;
-  final bool showBackground; 
+  final IconData secondaryIcon;
 
   @override
   Widget build(BuildContext context) {
+    return SizedBox(
+      width: 160,
+      height: 160,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 140,
+            height: 140,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color.withValues(alpha: 0.12),
+            ),
+          ),
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(28),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  color.withValues(alpha: 0.2),
+                  color.withValues(alpha: 0.08),
+                ],
+              ),
+            ),
+            child: Icon(icon, size: 52, color: color),
+          ),
+          Positioned(
+            top: 8,
+            right: 8,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: context.isDarkMode ? AppColors.cardDark : Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Icon(secondaryIcon, size: 20, color: color),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OnboardingPage extends StatelessWidget {
+  const _OnboardingPage({required this.page});
+
+  final _OnboardingPageData page;
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = AppSpacing.pagePadding(context);
+
     return Padding(
-      padding: const EdgeInsets.all(32),
+      padding: EdgeInsets.symmetric(horizontal: padding, vertical: AppSpacing.lg),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 120,
-            height: 120,
+            width: 180,
+            height: 180,
             decoration: BoxDecoration(
-              color: showBackground ? color.withValues(alpha: 0.1) : Colors.transparent,
-              borderRadius: BorderRadius.circular(32),
+              color: page.showIconBackground
+                  ? page.accentColor.withValues(alpha: 0.08)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(40),
             ),
-            child: Center(child: imageOrIcon),
+            child: Center(child: page.visual),
           ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
-          const SizedBox(height: 40),
+          const SizedBox(height: AppSpacing.xxl),
           Text(
-            title,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+            page.title,
+            style: context.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.5,
+            ),
             textAlign: TextAlign.center,
-          ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, end: 0),
-          const SizedBox(height: 16),
+          ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.15, end: 0),
+          const SizedBox(height: AppSpacing.md),
           Text(
-            description,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppColors.textSecondaryLight,
-                  height: 1.6,
-                ),
+            page.description,
+            style: context.textTheme.bodyLarge?.copyWith(
+              color: context.isDarkMode
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
+              height: 1.65,
+            ),
             textAlign: TextAlign.center,
-          ).animate().fadeIn(delay: 400.ms),
+          ).animate().fadeIn(delay: 350.ms),
         ],
       ),
     );
