@@ -27,9 +27,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   List<_OnboardingPageData> get _pages => [
     _OnboardingPageData(
       visual: const SizedBox(
-        width: 160,
-        height: 160,
-        child: BrandedLogo(sizeFactor: 0.24),
+        width: 132,
+        height: 132,
+        child: BrandedLogo(sizeFactor: 0.22, minSize: 82, maxSize: 108),
       ),
       title: AppStrings.onboardingTitle1,
       description: AppStrings.onboardingDesc1,
@@ -238,47 +238,57 @@ class _OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final padding = AppSpacing.pagePadding(context);
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: padding,
-        vertical: AppSpacing.lg,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 180,
-            height: 180,
-            decoration: BoxDecoration(
-              color: page.showIconBackground
-                  ? page.accentColor.withValues(alpha: 0.08)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(40),
-            ),
-            child: Center(child: page.visual),
-          ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
-          const SizedBox(height: AppSpacing.xxl),
-          Text(
-            page.title,
-            style: context.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-              letterSpacing: -0.5,
-            ),
-            textAlign: TextAlign.center,
-          ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.15, end: 0),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            page.description,
-            style: context.textTheme.bodyLarge?.copyWith(
-              color: context.isDarkMode
-                  ? AppColors.textSecondaryDark
-                  : AppColors.textSecondaryLight,
-              height: 1.65,
-            ),
-            textAlign: TextAlign.center,
-          ).animate().fadeIn(delay: 350.ms),
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final visualSize =
+            (constraints.maxHeight * 0.26).clamp(136.0, 172.0).toDouble();
+        final gap = constraints.maxHeight < 560 ? AppSpacing.lg : AppSpacing.xxl;
+
+        return Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: padding,
+            vertical: AppSpacing.md,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: visualSize,
+                height: visualSize,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: page.showIconBackground
+                        ? page.accentColor.withValues(alpha: 0.08)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(36),
+                  ),
+                  child: Center(child: page.visual),
+                ),
+              ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
+              SizedBox(height: gap),
+              Text(
+                page.title,
+                style: context.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  height: 1.15,
+                ),
+                textAlign: TextAlign.center,
+              ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.15, end: 0),
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                page.description,
+                style: context.textTheme.bodyLarge?.copyWith(
+                  color: context.isDarkMode
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondaryLight,
+                  height: 1.55,
+                ),
+                textAlign: TextAlign.center,
+              ).animate().fadeIn(delay: 350.ms),
+            ],
+          ),
+        );
+      },
     );
   }
 }

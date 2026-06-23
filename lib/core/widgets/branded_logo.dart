@@ -6,17 +6,26 @@ class BrandedLogo extends StatelessWidget {
   const BrandedLogo({
     super.key,
     this.sizeFactor = 0.28,
+    this.minSize = 72,
+    this.maxSize = 132,
     this.heroTag,
   });
 
   final double sizeFactor;
+  final double minSize;
+  final double maxSize;
   final String? heroTag;
 
   static const _assetPath = 'assets/images/logo.webp';
 
   @override
   Widget build(BuildContext context) {
-    final size = AppSpacing.logoSize(context, factor: sizeFactor);
+    final size = AppSpacing.logoSize(
+      context,
+      factor: sizeFactor,
+      min: minSize,
+      max: maxSize,
+    );
     final image = Image.asset(
       _assetPath,
       width: size,

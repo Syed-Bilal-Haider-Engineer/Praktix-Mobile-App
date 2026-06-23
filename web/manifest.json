@@ -1,11 +1,11 @@
 {
-    "name": "Praktix ",
-    "short_name": "Praktixflu",
+    "name": "Praktix",
+    "short_name": "Praktix",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F8FAFC",
+    "theme_color": "#2563EB",
+    "description": "Praktix mobile learning app for career growth, mentoring, and AI-supported skills.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

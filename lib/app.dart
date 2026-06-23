@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/responsive_app_frame.dart';
 import 'presentation/providers/theme_provider.dart';
 
 class PraktixApp extends ConsumerWidget {
@@ -19,6 +20,9 @@ class PraktixApp extends ConsumerWidget {
       darkTheme: AppTheme.dark,
       themeMode: themeMode,
       routerConfig: router,
+      builder: (context, child) {
+        return ResponsiveAppFrame(child: child ?? const SizedBox.shrink());
+      },
     );
   }
 }

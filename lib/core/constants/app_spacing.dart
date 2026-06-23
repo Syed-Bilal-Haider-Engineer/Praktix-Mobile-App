@@ -28,9 +28,14 @@ class AppSpacing {
     return width;
   }
 
-  static double logoSize(BuildContext context, {double factor = 0.28}) {
+  static double logoSize(
+    BuildContext context, {
+    double factor = 0.28,
+    double min = 72,
+    double max = 132,
+  }) {
     final width = MediaQuery.sizeOf(context).width;
-    return (width * factor).clamp(96.0, 160.0);
+    return (width * factor).clamp(min, max).toDouble();
   }
 
   static double horizontalListHeight(BuildContext context, double base) {

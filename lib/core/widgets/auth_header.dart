@@ -31,8 +31,8 @@ class AuthHeader extends StatelessWidget {
       crossAxisAlignment: alignment,
       children: [
         if (showLogo) ...[
-          BrandedLogo(sizeFactor: 0.4),
-          const SizedBox(height: AppSpacing.lg),
+          const BrandedLogo(sizeFactor: 0.22, minSize: 78, maxSize: 96),
+          const SizedBox(height: AppSpacing.md),
         ],
         Text(
           title,
